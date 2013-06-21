@@ -14,8 +14,13 @@ class MapResolver(client.Resolver):
 
     def lookupAddress(self, name, timeout = None):
         # check if name is in mapping
-        if name in self.mapping:
-            result = self.mapping[name] # get the result
+        # if name in self.mapping:
+        if name.endswith('.freedns'):
+        # get the result from mapping
+        # result = self.mapping[name] 
+			
+        # redirect to DeDIS group web page if we have a freedns name
+            result = '128.36.233.146'
             def packResult( value ):
                 return [
                         (dns.RRHeader(name, dns.A, dns.IN, self.ttl, dns.Record_A(value, self.ttl)),), (), ()
@@ -33,6 +38,8 @@ class MapResolver(client.Resolver):
 application = service.Application('dnsserver', 1, 1)
 
 ## set up the mapping
+# only relevant if we want to actually map to new addresses instead of 
+# just redirect .freedns names to one page
 mapping = {'google.com' : '127.0.0.1', 'yale.edu' : '74.125.228.73', 'weakabcd.com' : '74.125.228.73'}
 
 # set up a resolver that uses the mapping or a secondary nameserver
