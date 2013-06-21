@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-# Copyright (c) Twisted Matrix Laboratories.
-# See LICENSE for details.
-
 """
 Sample app to lookup SRV records in DNS.
 To run this script:

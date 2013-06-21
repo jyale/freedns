@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-# Copyright (c) Twisted Matrix Laboratories.
-# See LICENSE for details.
-
 """
 Prints the results of an Address record lookup, Mail-Exchanger record
 lookup, and Nameserver record lookup for the given hostname for a
