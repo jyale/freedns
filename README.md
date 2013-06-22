@@ -23,3 +23,7 @@ curl --socks4 localhost:1080 google.freedns
 // alternatively can send all DNS requests over freedns by
 // changing system settings to use smorz:53 as the dns server
 // do this in control panel in windows or resolv.conf in linux
+
+run socks proxy server on smorz by running from command line:
+python proxy.py &
+this runs the socks proxy on port 1080
