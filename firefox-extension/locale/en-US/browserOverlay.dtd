@@ -1,0 +1,4 @@
+<!ENTITY xulschoolhello.hello.label            "FreeDNS">
+<!ENTITY xulschoolhello.hello.label2            "Toggle FreeDNS access">
+<!ENTITY xulschoolhello.helloMenu.accesskey    "F">
+<!ENTITY xulschoolhello.helloItem.accesskey    "T">
