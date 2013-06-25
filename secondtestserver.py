@@ -1,8 +1,7 @@
 from twisted.names import dns, server, client, cache
 from twisted.application import service, internet
-from os import system
+import string
 from twisted.python import log
-
 
 class MapResolver(client.Resolver):
 	"""
@@ -26,16 +25,17 @@ class MapResolver(client.Resolver):
 			log.msg('Hello world.')
 			log.msg('url:' + name)
 			
-			#f = open('home/john/freedns/debug', 'w')
-			#f.write(name)
-			
+			# if have an invalid name redirect to google.com
+			result = '74.125.28.113'			
+			# now check if name is in fact valid
 			if(len(shortname) == 32):
-				result = '128.36.233.146'
-				#result = '130.132.35.53'
-			else:
-				result = '130.132.35.53' #6f700b83be72c6e24c45612e04717103
-				# redirect to DeDIS group web page if we have a freedns name
-			#f.write(result)
+				if(all(c in string.hexdigits for c in shortname)):
+					# redirect to DeDIS group web page if we have a valid freedns name (ssh-keygen public key fingerprint)
+					# example valid freedns name: 6f700b83be72c6e24c45612e04717103.freedns
+					result = '128.36.233.146'
+				#else:		
+				# yale.edu ip addr
+				# result = '130.132.35.53' 
 			
 			log.msg('result:' + result)
 			
