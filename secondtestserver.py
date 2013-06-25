@@ -1,37 +1,55 @@
 from twisted.names import dns, server, client, cache
 from twisted.application import service, internet
+from os import system
+from twisted.python import log
+
 
 class MapResolver(client.Resolver):
-    """
-    Resolves names by looking in a mapping. 
-    If `name in mapping` then mapping[name] should return a IP
-    else the next server in servers will be asked for name    
-    """
-    def __init__(self, mapping, servers):
-        self.mapping = mapping
-        client.Resolver.__init__(self, servers=servers)
-        self.ttl = 10
+	"""
+	Resolves names by looking in a mapping. 
+	If `name in mapping` then mapping[name] should return a IP
+	else the next server in servers will be asked for name	
+	"""
+	def __init__(self, mapping, servers):
+		self.mapping = mapping
+		client.Resolver.__init__(self, servers=servers)
+		self.ttl = 10
 
-    def lookupAddress(self, name, timeout = None):
-        # check if name is in mapping
-        # if name in self.mapping:
-        if name.endswith('.freedns'):
-        # get the result from mapping
-        # result = self.mapping[name] 
+	def lookupAddress(self, name, timeout = None):
+		# check if name is in mapping
+		# if name in self.mapping:
+		if name.endswith('.freedns'):
+			# get the result from mapping
+			# result = self.mapping[name] 
+			shortname = name.replace('.freedns','')
 			
-        # redirect to DeDIS group web page if we have a freedns name
-            result = '128.36.233.146'
-            def packResult( value ):
-                return [
-                        (dns.RRHeader(name, dns.A, dns.IN, self.ttl, dns.Record_A(value, self.ttl)),), (), ()
-                ]
-            x = packResult(result) # put it in a A Record
-            print x
-            return x
-        else:
-            x = self._lookup(name, dns.IN, dns.A, timeout)
-            print x
-            return x
+			log.msg('Hello world.')
+			log.msg('url:' + name)
+			
+			#f = open('home/john/freedns/debug', 'w')
+			#f.write(name)
+			
+			if(len(shortname) == 32):
+				result = '128.36.233.146'
+				#result = '130.132.35.53'
+			else:
+				result = '130.132.35.53' #6f700b83be72c6e24c45612e04717103
+				# redirect to DeDIS group web page if we have a freedns name
+			#f.write(result)
+			
+			log.msg('result:' + result)
+			
+			def packResult( value ):
+				return [
+						(dns.RRHeader(name, dns.A, dns.IN, self.ttl, dns.Record_A(value, self.ttl)),), (), ()
+				]
+			x = packResult(result) # put it in a A Record
+			print x
+			return x
+		else:
+			x = self._lookup(name, dns.IN, dns.A, timeout)
+			print x
+			return x
 
 
 ## this sets up the application
@@ -55,13 +73,13 @@ ret = service.MultiService()
 PORT=53
 
 for (klass, arg) in [(internet.TCPServer, f), (internet.UDPServer, p)]:
-    s = klass(PORT, arg)
-    s.setServiceParent(ret)
+	s = klass(PORT, arg)
+	s.setServiceParent(ret)
 
 # run all of the above as a twistd application
 ret.setServiceParent(service.IServiceCollection(application))
 
 # run it through twistd
 if __name__ == '__main__':
-    import sys
-    print "Usage: twistd -y %s" % sys.argv[0]
+	import sys
+	print "Usage: twistd -y %s" % sys.argv[0]
