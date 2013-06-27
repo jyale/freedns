@@ -35,7 +35,7 @@ XULSchoolChrome.BrowserOverlay = {
 	prefs.setCharPref("socks", "128.36.231.74");
     if(value != 1){
 		window.alert(message);
-		myFunction();
+		//myFunction();
 	}else{
 		window.alert(message2);
 	}
@@ -72,20 +72,47 @@ XULSchoolChrome.BrowserOverlay = {
 
   function myFunction()
 	{
-	var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
+		var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
 		var samplePanel = document.getElementById('status-bar-sample-1');
 		// alert("Hello World! \n\n" + newURL + " \n\n" + Sha1.hash(newURL));
-		if(newURL.length > 50){
+		var shortnewURL = newURL;
+		if(shortnewURL.length > 50){
 			// truncate URL if too long to display in status bar
-			newURL = newURL.substring(0,50) + "...";
+			shortnewURL = newURL.substring(0,50) + "...";
 		}
-		samplePanel.label = Sha1.hash(newURL) + "       is the FreeDNS name for       " + newURL;
+		samplePanel.label = Sha1.hash(newURL) + ".freedns" + "       is the FreeDNS name for       " + shortnewURL;
 	};
 	
+	// called when the window is loaded
 	 function windowLoad()
 	{
 		window.setInterval(myFunction, 1000);
+		// connect to freedns
+			var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefService).getBranch("network.proxy.");
+		prefs.setIntPref("type", 1); // set a pref (accessibility.typeaheadfind)
+		prefs.setBoolPref("socks_remote_dns", 1); // set a pref (accessibility.typeaheadfind)
+		prefs.setIntPref("socks_port", 1080);
+		prefs.setIntPref("socks_version", 4);
+		prefs.setCharPref("socks", "128.36.231.74");		
 	};
+	
+	 function copyFunction()
+	{
+		// get the url from address bar
+		var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
+		// hash it with sha1
+		var fdnsname = Sha1.hash(newURL) + ".freedns";
+		alert("Copied FreeDNS name to clipboard: \n" + fdnsname);
+		
+		// copy the freedns hash to the clipboard
+		const gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
+                                   .getService(Components.interfaces.nsIClipboardHelper);
+		gClipboardHelper.copyString(fdnsname);
+	};
+	
+	
+	
 	
 	// add event listener to execute function when new window is opened
 	window.addEventListener("load", function(e) { windowLoad(); }, false);
@@ -97,14 +124,14 @@ XULSchoolChrome.BrowserOverlay = {
 	var container = gBrowser.tabContainer;
 	container.addEventListener("TabSelect", myFunction, false);
 	
-	// window.addEventListener("load", function () {
-	  // Add a callback to be run every time a document loads.
-	  // note that this includes frames/iframes within the document
-	  // gBrowser.addEventListener("load", myFunction, true);
-	// }, false);
+	// var samplePanel = document.getElementById('status-bar-sample-1');
+	// samplePanel.addEventListener("TabSelect", myFunction, false);
+
 	
-	// When no longer needed
-	// gBrowser.removeEventListener("load", myFunction, true);
+	
+	///////////////////////////////////////////////////////
+	// SHA1 HASH FUNCTION BELOW
+	///////////////////////////////////////////////////////
 	
 var Sha1 = {};  // Sha1 namespace
 

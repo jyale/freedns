@@ -48,7 +48,12 @@
  </statusbar>
 -->
   <statusbar>
-  <statusbarpanel label="Left panel" id="status-bar-sample-1" />
+  <statusbarpanel 
+	  label="Left panel" 
+	  id="status-bar-sample-1"  
+	  onclick="copyFunction()" 
+	  tooltiptext="Click to copy to clipboard"
+  />
   <!--
   <spacer flex="1"/>
   <progressmeter mode="determined" value="82"/>
