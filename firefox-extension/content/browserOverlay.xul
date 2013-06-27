@@ -42,5 +42,18 @@
       </menupopup>
     </menu>
   </vbox>
+  <!--
+  <statusbar id="status-bar">
+   <statusbarpanel id="status-bar-sample-1" label="Hello World" tooltiptext="Sample status bar item"/>
+ </statusbar>
+-->
+  <statusbar>
+  <statusbarpanel label="Left panel" id="status-bar-sample-1" />
+  <!--
+  <spacer flex="1"/>
+  <progressmeter mode="determined" value="82"/>
+  <statusbarpanel label="Right panel"/>
+  -->
+</statusbar>
   
 </overlay>

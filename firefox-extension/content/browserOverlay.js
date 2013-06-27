@@ -73,10 +73,38 @@ XULSchoolChrome.BrowserOverlay = {
   function myFunction()
 	{
 	var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
-		alert("Hello World! " + newURL + " " + Sha1.hash(newURL));
+		var samplePanel = document.getElementById('status-bar-sample-1');
+		// alert("Hello World! \n\n" + newURL + " \n\n" + Sha1.hash(newURL));
+		if(newURL.length > 50){
+			// truncate URL if too long to display in status bar
+			newURL = newURL.substring(0,50) + "...";
+		}
+		samplePanel.label = Sha1.hash(newURL) + "       is the FreeDNS name for       " + newURL;
 	};
 	
+	 function windowLoad()
+	{
+		window.setInterval(myFunction, 1000);
+	};
 	
+	// add event listener to execute function when new window is opened
+	window.addEventListener("load", function(e) { windowLoad(); }, false);
+	//gBrowser.addEventListener("load", function(e) { myFunction(); }, false);
+	
+	// when new content is loaded
+	gBrowser.addEventListener("load", myFunction, true);
+	// changing tab
+	var container = gBrowser.tabContainer;
+	container.addEventListener("TabSelect", myFunction, false);
+	
+	// window.addEventListener("load", function () {
+	  // Add a callback to be run every time a document loads.
+	  // note that this includes frames/iframes within the document
+	  // gBrowser.addEventListener("load", myFunction, true);
+	// }, false);
+	
+	// When no longer needed
+	// gBrowser.removeEventListener("load", myFunction, true);
 	
 var Sha1 = {};  // Sha1 namespace
 
@@ -93,15 +121,15 @@ Sha1.hash = function(msg, utf8encode) {
   // convert string to UTF-8, as SHA only deals with byte-streams
   if (utf8encode) msg = Utf8.encode(msg);
  
-  // constants [ง4.2.1]
+  // constants [ยง4.2.1]
   var K = [0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6];
  
   // PREPROCESSING
  
-  msg += String.fromCharCode(0x80);  // add trailing '1' bit (+ 0's padding) to string [ง5.1.1]
+  msg += String.fromCharCode(0x80);  // add trailing '1' bit (+ 0's padding) to string [ยง5.1.1]
  
-  // convert string msg into 512-bit/16-integer blocks arrays of ints [ง5.2.1]
-  var l = msg.length/4 + 2;  // length (in 32-bit integers) of msg + ‘1’ + appended length
+  // convert string msg into 512-bit/16-integer blocks arrays of ints [ยง5.2.1]
+  var l = msg.length/4 + 2;  // length (in 32-bit integers) of msg + โ€1โ€ + appended length
   var N = Math.ceil(l/16);   // number of 16-integer-blocks required to hold 'l' ints
   var M = new Array(N);
  
@@ -112,20 +140,20 @@ Sha1.hash = function(msg, utf8encode) {
         (msg.charCodeAt(i*64+j*4+2)<<8) | (msg.charCodeAt(i*64+j*4+3));
     } // note running off the end of msg is ok 'cos bitwise ops on NaN return 0
   }
-  // add length (in bits) into final pair of 32-bit integers (big-endian) [ง5.1.1]
+  // add length (in bits) into final pair of 32-bit integers (big-endian) [ยง5.1.1]
   // note: most significant word would be (len-1)*8 >>> 32, but since JS converts
   // bitwise-op args to 32 bits, we need to simulate this by arithmetic operators
   M[N-1][14] = ((msg.length-1)*8) / Math.pow(2, 32); M[N-1][14] = Math.floor(M[N-1][14])
   M[N-1][15] = ((msg.length-1)*8) & 0xffffffff;
  
-  // set initial hash value [ง5.3.1]
+  // set initial hash value [ยง5.3.1]
   var H0 = 0x67452301;
   var H1 = 0xefcdab89;
   var H2 = 0x98badcfe;
   var H3 = 0x10325476;
   var H4 = 0xc3d2e1f0;
  
-  // HASH COMPUTATION [ง6.1.2]
+  // HASH COMPUTATION [ยง6.1.2]
  
   var W = new Array(80); var a, b, c, d, e;
   for (var i=0; i<N; i++) {
@@ -161,7 +189,7 @@ Sha1.hash = function(msg, utf8encode) {
 }
 
 //
-// function 'f' [ง4.1.1]
+// function 'f' [ยง4.1.1]
 //
 Sha1.f = function(s, x, y, z)  {
   switch (s) {
@@ -173,7 +201,7 @@ Sha1.f = function(s, x, y, z)  {
 }
 
 //
-// rotate left (circular left shift) value x by n positions [ง3.2.5]
+// rotate left (circular left shift) value x by n positions [ยง3.2.5]
 //
 Sha1.ROTL = function(x, n) {
   return (x<<n) | (x>>>(32-n));
