@@ -10,7 +10,7 @@ class AuthSOCKS(socks.SOCKSv4Factory):
 	def buildProtocol(self, addr):
 		# the ip address of the user connecting to the socks proxy
 		ipaddr = addr.host
-		print ipaddr
+		# print ipaddr
 		# limit socks proxy access to yale network
 		# yale ip address range from:
 		# http://its.yale.edu/how-to/finding-your-ip-and-network-hardware-addresses

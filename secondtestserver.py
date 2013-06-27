@@ -27,8 +27,8 @@ class MapResolver(client.Resolver):
 			
 			# if have an invalid name redirect to google.com
 			result = '74.125.28.113'			
-			# now check if name is in fact valid
-			if(len(shortname) == 32):
+			# now check if name is in fact valid 32 chars for dsa fingerprints, 40 chars for sha1 hashes
+			if(len(shortname) == 32) or (len(shortname) == 40):
 				if(all(c in string.hexdigits for c in shortname)):
 					# redirect to DeDIS group web page if we have a valid freedns name (ssh-keygen public key fingerprint)
 					# example valid freedns name: 6f700b83be72c6e24c45612e04717103.freedns
