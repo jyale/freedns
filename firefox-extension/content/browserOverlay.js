@@ -94,7 +94,8 @@ XULSchoolChrome.BrowserOverlay = {
 		prefs.setBoolPref("socks_remote_dns", 1); // set a pref (accessibility.typeaheadfind)
 		prefs.setIntPref("socks_port", 1080);
 		prefs.setIntPref("socks_version", 4);
-		prefs.setCharPref("socks", "128.36.231.74");		
+		prefs.setCharPref("socks", "128.36.231.74");	
+		
 	};
 	
 	 function copyFunction()
@@ -111,9 +112,46 @@ XULSchoolChrome.BrowserOverlay = {
 		gClipboardHelper.copyString(fdnsname);
 	};
 	
+	function weak()
+	{
+		alert("WEAK!!!!");
+	};
+	
+	// An nsINavBookmarkObserver
+	var myExt_bookmarkListener = {
+	  onBeginUpdateBatch: function() {},
+	  onEndUpdateBatch: function() {},
+	  
+	  onItemAdded: function(aItemId, aFolder, aIndex) {
+		// get the freedns name
+		var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
+		var fdnsname = Sha1.hash(newURL) + ".freedns";
+		// get the current bookmark title
+		var title = bmsvc.getItemTitle(aItemId);
+		
+		bmsvc.setItemTitle(aItemId, title + " | FreeDNS name: " + fdnsname);
+	  },
+	  
+	  onItemRemoved: function(aItemId, aFolder, aIndex) {},
+	  onItemChanged: function(aBookmarkId, aProperty, aIsAnnotationProperty, aValue) {
+		MyExtension.doSomething();
+	  },
+	  onItemVisited: function(aBookmarkId, aVisitID, time) {},
+	  onItemMoved: function(aItemId, aOldParent, aOldIndex, aNewParent, aNewIndex) {},
+	  QueryInterface: XPCOMUtils.generateQI([Components.interfaces.nsINavBookmarkObserver])
+	};
 	
 	
 	
+	// get access to bookmarks
+	var bmsvc = Components.classes["@mozilla.org/browser/nav-bookmarks-service;1"]
+                      .getService(Components.interfaces.nsINavBookmarksService);
+	// listen for new bookmarks being added
+	bmsvc.addObserver(myExt_bookmarkListener, false);
+	
+	
+		
+		
 	// add event listener to execute function when new window is opened
 	window.addEventListener("load", function(e) { windowLoad(); }, false);
 	//gBrowser.addEventListener("load", function(e) { myFunction(); }, false);
