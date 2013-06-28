@@ -54,11 +54,18 @@
 	  onclick="copyFunction()" 
 	  tooltiptext="Click to copy to clipboard"
   />
-  <!--
+  
   <spacer flex="1"/>
+  <!--
   <progressmeter mode="determined" value="82"/>
-  <statusbarpanel label="Right panel"/>
   -->
+  <statusbarpanel 
+  label="Right panel" 
+	  id="right-panel"  
+	  onclick="toggle()" 
+	  tooltiptext="Click to toggle FreeDNS access"
+	/>
+  	 
 </statusbar>
   
 </overlay>

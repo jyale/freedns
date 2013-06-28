@@ -33,11 +33,14 @@ XULSchoolChrome.BrowserOverlay = {
 	prefs.setIntPref("socks_port", 1080);
 	prefs.setIntPref("socks_version", 4);
 	prefs.setCharPref("socks", "128.36.231.74");
-    if(value != 1){
+    var rightPanel = document.getElementById('right-panel');
+	if(value != 1){
 		window.alert(message);
+		rightPanel.label = "Connected to FreeDNS";
 		//myFunction();
 	}else{
 		window.alert(message2);
+		rightPanel.label = "Disconnected from FreeDNS";
 	}
   }
   
@@ -80,7 +83,7 @@ XULSchoolChrome.BrowserOverlay = {
 			// truncate URL if too long to display in status bar
 			shortnewURL = newURL.substring(0,50) + "...";
 		}
-		samplePanel.label = Sha1.hash(newURL) + ".freedns" + "       is the FreeDNS name for       " + shortnewURL;
+		samplePanel.label = "FreeDNS name: " + Sha1.hash(newURL) + ".freedns [click to copy]";
 	};
 	
 	// called when the window is loaded
@@ -95,7 +98,9 @@ XULSchoolChrome.BrowserOverlay = {
 		prefs.setIntPref("socks_port", 1080);
 		prefs.setIntPref("socks_version", 4);
 		prefs.setCharPref("socks", "128.36.231.74");	
-		
+		// say that we are connected to FreeDNS
+		var rightPanel = document.getElementById('right-panel');
+		rightPanel.label = "Connected to FreeDNS";
 	};
 	
 	 function copyFunction()
@@ -110,6 +115,28 @@ XULSchoolChrome.BrowserOverlay = {
 		const gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
                                    .getService(Components.interfaces.nsIClipboardHelper);
 		gClipboardHelper.copyString(fdnsname);
+	};
+	
+	// toggle freedns access on and off
+	function toggle(){
+		var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefService).getBranch("network.proxy.");
+		var value = prefs.getIntPref("type"); 
+		if(value != 1){
+			prefs.setIntPref("type", 1); 
+		}else{
+			prefs.setIntPref("type", 5);
+		}	
+		prefs.setBoolPref("socks_remote_dns", 1);
+		prefs.setIntPref("socks_port", 1080);
+		prefs.setIntPref("socks_version", 4);
+		prefs.setCharPref("socks", "128.36.231.74");
+		var rightPanel = document.getElementById('right-panel');
+		if(value != 1){
+			rightPanel.label = "Connected to FreeDNS";
+		}else{
+			rightPanel.label = "Disconnected from FreeDNS";
+		}
 	};
 	
 	function weak()
