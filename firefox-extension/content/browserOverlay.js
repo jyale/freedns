@@ -13,7 +13,10 @@ XULSchoolChrome.BrowserOverlay = {
    * Says 'Hello' to the FreeDNS underworld.
    */
   sayHello : function(aEvent) {
-    let stringBundle = document.getElementById("xulschoolhello-string-bundle");
+    toggle(true);
+	
+	/*
+	let stringBundle = document.getElementById("xulschoolhello-string-bundle");
     var message = stringBundle.getString("xulschoolhello.greeting.label");
 	var message2 = "You are no longer connected to FreeDNS";
 	// set about:config to proxy dns reqs
@@ -34,14 +37,22 @@ XULSchoolChrome.BrowserOverlay = {
 	prefs.setIntPref("socks_version", 4);
 	prefs.setCharPref("socks", "128.36.231.74");
     var rightPanel = document.getElementById('right-panel');
+	var toggleButton = document.getElementById('nav-toggle');
+	var menuButton =  document.getElementById('xulschoolhello-hello-menu-item');
+	
 	if(value != 1){
 		window.alert(message);
 		rightPanel.label = "Connected to FreeDNS";
+		toggleButton.label = "Disconnect from FreeDNS";
+		menuButton.label = "Disconnect from FreeDNS";
 		//myFunction();
 	}else{
 		window.alert(message2);
 		rightPanel.label = "Disconnected from FreeDNS";
+		toggleButton.label = "Connect to FreeDNS";
+		menuButton.label = "Connect to FreeDNS";
 	}
+	*/
   }
   
   /**
@@ -100,8 +111,31 @@ XULSchoolChrome.BrowserOverlay = {
 		prefs.setCharPref("socks", "128.36.231.74");	
 		// say that we are connected to FreeDNS
 		var rightPanel = document.getElementById('right-panel');
+		var toggleButton = document.getElementById('nav-toggle');
+		var menuButton =  document.getElementById('xulschoolhello-hello-menu-item');
+		var menuButton2 =  document.getElementById('xulschoolhello-hello-menu-item-2');
+		
 		rightPanel.label = "Connected to FreeDNS";
+		toggleButton.label = "Disconnect from FreeDNS";
+		menuButton.label = "Disconnect from FreeDNS";
+		menuButton2.label = "Disconnect from FreeDNS";
+		
 	};
+	
+	function toggleBar(){
+		var toolbar = document.getElementById('nav-toolbar');
+		toolbar.hidden = !toolbar.hidden;
+		var menu1 = document.getElementById('view-bar1');
+		var menu2 = document.getElementById('view-bar2');
+		if(toolbar.hidden){
+			menu1.label="Show FreeDNS toolbar";
+			menu2.label="Show FreeDNS toolbar";
+		}else{
+			menu1.label="Hide FreeDNS toolbar";
+			menu2.label="Hide FreeDNS toolbar";
+		}
+		
+	}
 	
 	 function copyFunction()
 	{
@@ -117,8 +151,22 @@ XULSchoolChrome.BrowserOverlay = {
 		gClipboardHelper.copyString(fdnsname);
 	};
 	
+	// about freedns access on and off
+	function about(){
+		alert("FreeDNS has been developed at Yale University by Dr Ramki Gummadi, Prof Bryan Ford, Prof Avi Silberschatz and John Maheswaran. \nFreeDNS © 2013. ");
+	};
+	
+	function viewDns(){
+		var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
+		// hash it with sha1
+		var fdnsname = Sha1.hash(newURL) + ".freedns";
+		alert(fdnsname + "\nis the FreeDNS name for:\n" + newURL);
+		// alert("weak");
+	};
+	
+	
 	// toggle freedns access on and off
-	function toggle(){
+	function toggle(alert){
 		var prefs = Components.classes["@mozilla.org/preferences-service;1"]
                     .getService(Components.interfaces.nsIPrefService).getBranch("network.proxy.");
 		var value = prefs.getIntPref("type"); 
@@ -132,10 +180,26 @@ XULSchoolChrome.BrowserOverlay = {
 		prefs.setIntPref("socks_version", 4);
 		prefs.setCharPref("socks", "128.36.231.74");
 		var rightPanel = document.getElementById('right-panel');
+		var toggleButton = document.getElementById('nav-toggle');
+		var menuButton =  document.getElementById('xulschoolhello-hello-menu-item');
+		var menuButton2 =  document.getElementById('xulschoolhello-hello-menu-item-2');
+			
 		if(value != 1){
 			rightPanel.label = "Connected to FreeDNS";
+			toggleButton.label = "Disconnect from FreeDNS";
+			menuButton.label = "Disconnect from FreeDNS";
+			menuButton2.label = "Disconnect from FreeDNS";
+			if(alert){
+				window.alert("Welcome to the FreeDNS underworld...");
+			}
 		}else{
 			rightPanel.label = "Disconnected from FreeDNS";
+			toggleButton.label = "Connect to FreeDNS";
+			menuButton.label = "Connect to FreeDNS";
+			menuButton2.label = "Connect to FreeDNS";
+			if(alert){
+				window.alert("No longer connected to FreeDNS");
+			}
 		}
 	};
 	

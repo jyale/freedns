@@ -26,6 +26,11 @@
           label="&xulschoolhello.hello.label2;"
           accesskey="&xulschoolhello.helloItem.accesskey;"
           oncommand="XULSchoolChrome.BrowserOverlay.sayHello(event);" />
+		  
+		  <menuitem id="view-bar1"
+          label="Hide FreeDNS toolbar"
+          oncommand="toggleBar()" />
+		  
       </menupopup>
     </menu>
   </menubar>
@@ -39,6 +44,10 @@
           label="&xulschoolhello.hello.label2;"
           accesskey="&xulschoolhello.helloItem.accesskey;"
           oncommand="XULSchoolChrome.BrowserOverlay.sayHello(event);" />
+		  <menuitem id="view-bar2"
+          label="Hide FreeDNS toolbar"
+          oncommand="toggleBar()" />
+		  
       </menupopup>
     </menu>
   </vbox>
@@ -47,6 +56,23 @@
    <statusbarpanel id="status-bar-sample-1" label="Hello World" tooltiptext="Sample status bar item"/>
  </statusbar>
 -->
+<window id="main-window">
+  <toolbox id="navigator-toolbox"> 
+	  <toolbar id="nav-toolbar" toolbarname="FreeDNS" insertbefore="PersonalToolbar" hidden="false">
+    <toolbarbutton id="nav-view"  accesskey="V" label="View FreeDNS name" onclick="viewDns()" />
+    <toolbarbutton id="nav-copy" accesskey="C" label="Copy FreeDNS name" onclick="copyFunction()" />
+	<toolbarbutton id="nav-toggle" accesskey="T" label="Toggle FreeDNS access"  onclick="toggle(true)"/>
+	<toolbarbutton id="nav-hide" accesskey="H" label="Hide toolbar"  onclick="toggleBar()"/>
+    <toolbarbutton id="nav-about" accesskey="A" label="About" onclick="about()"/>
+  </toolbar>
+  </toolbox>
+</window>
+
+
+  <toolbox>
+  
+</toolbox>
+
   <statusbar>
   <statusbarpanel 
 	  label="Left panel" 
@@ -62,10 +88,15 @@
   <statusbarpanel 
   label="Right panel" 
 	  id="right-panel"  
-	  onclick="toggle()" 
+	  onclick="toggle(false)" 
 	  tooltiptext="Click to toggle FreeDNS access"
 	/>
   	 
 </statusbar>
+
+
+
+
+
   
 </overlay>
