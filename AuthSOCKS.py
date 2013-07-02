@@ -16,12 +16,12 @@ class AuthSOCKS(socks.SOCKSv4Factory):
 		# yale ip address range from:
 		# http://its.yale.edu/how-to/finding-your-ip-and-network-hardware-addresses
 
-		# uncomment following line to limit access to Yale network
-
-		# if ipaddr.startswith('130.132.') or ipaddr.startswith('128.36.'):
 		# log all connections
 		log.msg("New client connected: " + ipaddr)
-		return socks.SOCKSv4Factory.buildProtocol(self,addr)
+
+		# uncomment following line to limit access to Yale network
+		if ipaddr.startswith('130.132.') or ipaddr.startswith('128.36.'):
+			return socks.SOCKSv4Factory.buildProtocol(self,addr)
 				
 	   
 	 
