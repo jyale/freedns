@@ -20,8 +20,8 @@ class AuthSOCKS(socks.SOCKSv4Factory):
 		log.msg("New client connected: " + ipaddr)
 
 		# uncomment following line to limit access to Yale network
-		if ipaddr.startswith('130.132.') or ipaddr.startswith('128.36.'):
+		if ipaddr.startswith('130.132.') or  ipaddr.startswith('128.36.') or ipaddr.startswith('172.22.'):
 			return socks.SOCKSv4Factory.buildProtocol(self,addr)
-				
+			
 	   
-	 
+	
