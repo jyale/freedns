@@ -14,6 +14,7 @@ class MapResolver(client.Resolver):
 		client.Resolver.__init__(self, servers=servers)
 		self.ttl = 10
 
+	# lookup A records (IP addresses)
 	def lookupAddress(self, name, timeout = None):
 		# check if name is in mapping
 		# if name in self.mapping:
@@ -39,18 +40,39 @@ class MapResolver(client.Resolver):
 			
 			log.msg('result:' + result)
 			
+			if(shortname == "bryan-at-gmail.com"):
+				x = self._lookup("brynosaurus.com", dns.IN, dns.A, timeout)
+				log.msg("bryan " + str(x.name))
+				return x
+				
 			def packResult( value ):
 				return [
 						(dns.RRHeader(name, dns.A, dns.IN, self.ttl, dns.Record_A(value, self.ttl)),), (), ()
 				]
-			x = packResult(result) # put it in a A Record
-			print x
+			#x = packResult(result) # put it in a A Record
+			x = packResult(result)
+			
+			
+			log.msg("DNS record: " + str(dns.Record_A(result, self.ttl)))
+			log.msg("CNAME test: " + str(dns.Record_CNAME('see-mail.herokuapp.com',self.ttl)))
+			y = [(dns.RRHeader(name, dns.CNAME, dns.IN, self.ttl, dns.Record_CNAME('see-mail.herokuapp.com',self.ttl)),), (), ()]
+			log.msg("Packed result: " + str(x))
+			log.msg("Packed CNAME: " + str(y))
+			
 			return x
 		else:
 			x = self._lookup(name, dns.IN, dns.A, timeout)
 			print x
 			return x
-
+	
+	# CNAME lookups
+	def lookupCanonicalName(self, name, timeout=None):
+		log.msg("CNAME lookup!!!" + name)
+		y = [(dns.RRHeader(name, dns.CNAME, dns.IN, self.ttl, dns.Record_CNAME('see-mail.herokuapp.com',self.ttl)),), (), ()]
+		
+		x = self._lookup(name, dns.IN, dns.A, timeout)
+		return x
+	
 
 ## this sets up the application
 application = service.Application('dnsserver', 1, 1)
