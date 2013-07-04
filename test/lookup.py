@@ -16,9 +16,10 @@ from twisted.names import client
 from twisted.internet import defer, reactor
 from twisted.names import dns, error
 
-
-r = client.Resolver('/etc/resolv.conf')
-
+# Google dns server
+r = client.Resolver('8.8.8.8')
+# client default dns server
+# r = client.Resolver('/etc/resolv.conf')
 
 def formatResult(a, heading):
 	answer, authority, additional = a
@@ -50,7 +51,7 @@ def printError(f):
 
 def printResults(res):
 	# for r in res:
-	print "WEAK!!! " + res[0]
+	print res[0].replace('\n','')
 		# print
 
 
