@@ -5,7 +5,7 @@ from twisted.python import log
 class AuthSOCKS(socks.SOCKSv4Factory):
 	def __init__(self, logfile):
 		# print logfile
-		log.startLogging(open('weak.log', 'w'))
+		log.startLogging(open('weak.log', 'a'))
 		socks.SOCKSv4Factory.__init__(self, logfile)   
 	   
 	def buildProtocol(self, addr):
@@ -22,6 +22,6 @@ class AuthSOCKS(socks.SOCKSv4Factory):
 		# uncomment following line to limit access to Yale network
 		if ipaddr.startswith('130.132.') or  ipaddr.startswith('128.36.') or ipaddr.startswith('172.22.') or ipaddr.startswith ('172.27'):
 			return socks.SOCKSv4Factory.buildProtocol(self,addr)
-			
+		log.msg("Unknown non Yale client: " + ipaddr)
 	   
 	
