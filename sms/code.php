@@ -3,19 +3,17 @@
 $number = $_POST["number"];
 $ip = $_POST["ipaddr"];
 
-$code = uniqid();
+$code = substr(uniqid(),7);
 
-file_put_contents($number,$code);
+file_put_contents($number . ".code",$code);
 
-// Download/Install the PHP helper library from twilio.com/docs/libraries.
-// This line loads the library
 require('twilio/Services/Twilio.php');
-// Your Account Sid and Auth Token from twilio.com/user/account
 $sid = file_get_contents("sid");
 $token = file_get_contents("token");
 $client = new Services_Twilio($sid, $token);
 
-echo $sid;
+echo $code;
+echo('<br>');
 	$message = $client->account->sms_messages->create("+12037120067", $number, $code, array());
 	echo $message->sid;
 	echo '<br>weak<br>';
@@ -29,6 +27,14 @@ echo $sid;
 
 Welcome <?php echo $_POST["number"]; ?>!<br>
 IP address: <?php echo $_POST["ipaddr"]; ?>
+<br>
+
+<form action="insert.php" method="post">
+<input type="text" name="number" value="<? echo $number ?>" hidden>
+<input type="text" name="ipaddr" value="<? echo $ip ?>" hidden>
+Code: <input type="text" name="code"><br>
+<input type="submit">
+</form>
 
 
 </body>
