@@ -2,6 +2,10 @@ from twisted.names import dns, server, client, cache
 from twisted.application import service, internet
 import string
 from twisted.python import log
+from os import system
+import subprocess
+import os
+from twisted.internet import defer
 
 class MapResolver(client.Resolver):
 	"""
@@ -13,7 +17,10 @@ class MapResolver(client.Resolver):
 		self.mapping = mapping
 		client.Resolver.__init__(self, servers=servers)
 		self.ttl = 10
-
+	
+	
+	
+	
 	# lookup A records (IP addresses)
 	def lookupAddress(self, name, timeout = None):
 		# check if name is in mapping
@@ -40,10 +47,37 @@ class MapResolver(client.Resolver):
 			
 			log.msg('result:' + result)
 			
-			if(shortname == "bryan-at-gmail.com"):
-				x = self._lookup("brynosaurus.com", dns.IN, dns.A, timeout)
-				log.msg("bryan " + str(x.name))
-				return x
+			def printResults(res):
+				return res[0]
+				# for r in res:
+					# log.msg("WEAK+  " + str(r))
+					
+			def formatResult(a, heading):
+				answer, authority, additional = a
+				lines = ['# ' + heading]
+				a = answer[0]
+				line = str(a.payload)
+				line = line.replace('<A address=','')
+				line = line.split(' ttl=')[0]
+				return line
+					
+			if(shortname.startswith('bryan-at-gmail.com')):
+				# x = system("python test/testdns.py brynosaurus.com")
+				
+				# lookup a different IP address:
+				result = os.popen("dig @8.8.8.8 yale.edu +short | head -1").read()
+				
+				log.msg("bryan::: " + result)
+				# d = defer.gatherResults([
+					# self.lookupAddress('yale.edu').addCallback(formatResult, 'weak'),], consumeErrors=True)
+				# d.addCallback(printResults)
+				
+				# log.msg("FOOL" + str(self.lookupAddress('yale.edu')))
+				
+				# log.msg(str(os.popen("echo Hello World").read()))
+				# x = self._lookup("brynosaurus.com", dns.IN, dns.A, timeout)
+				# log.msg("bryan " + str(x.name))
+				# return
 				
 			def packResult( value ):
 				return [
@@ -72,6 +106,8 @@ class MapResolver(client.Resolver):
 		
 		x = self._lookup(name, dns.IN, dns.A, timeout)
 		return x
+		
+	
 	
 
 ## this sets up the application
@@ -81,6 +117,8 @@ application = service.Application('dnsserver', 1, 1)
 # only relevant if we want to actually map to new addresses instead of 
 # just redirect .freedns names to one page
 mapping = {'google.com' : '127.0.0.1', 'yale.edu' : '74.125.228.73', 'weakabcd.com' : '74.125.228.73'}
+
+
 
 # set up a resolver that uses the mapping or a secondary nameserver
 p2presolver = MapResolver(mapping, servers=[('8.8.8.8', 53)])
