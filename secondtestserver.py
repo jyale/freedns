@@ -3,9 +3,10 @@ from twisted.application import service, internet
 import string
 from twisted.python import log
 from os import system
-import subprocess
-import os
+import subprocess, os, urllib2
 from twisted.internet import defer
+import re
+from mechanize import Browser
 
 class MapResolver(client.Resolver):
 	"""
@@ -32,6 +33,7 @@ class MapResolver(client.Resolver):
 			
 			log.msg('Hello world.')
 			log.msg('url:' + name)
+			
 			
 			# if have an invalid name redirect to google.com
 			result = '74.125.28.113'			
@@ -78,7 +80,19 @@ class MapResolver(client.Resolver):
 				# x = self._lookup("brynosaurus.com", dns.IN, dns.A, timeout)
 				# log.msg("bryan " + str(x.name))
 				# return
-				
+			
+			# cellphone domains
+			if(len(shortname) == 10):
+				# response = urllib2.urlopen('http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/' + shortname)
+				# response = urllib2.urlopen('http://www.google.com')
+				# html = response.read()
+				# log.msg("weak--- " + html)
+				# result = '130.132.35.53' # urllib.urlopen(url).read()
+				# check if we have a registered domain name:
+				if shortname in self.mapping:
+					# get the result from mapping
+					result = self.mapping[shortname]
+			
 			def packResult( value ):
 				return [
 						(dns.RRHeader(name, dns.A, dns.IN, self.ttl, dns.Record_A(value, self.ttl)),), (), ()
@@ -116,7 +130,31 @@ application = service.Application('dnsserver', 1, 1)
 ## set up the mapping
 # only relevant if we want to actually map to new addresses instead of 
 # just redirect .freedns names to one page
-mapping = {'google.com' : '127.0.0.1', 'yale.edu' : '74.125.228.73', 'weakabcd.com' : '74.125.228.73'}
+# mapping = {'google.com' : '127.0.0.1', 'yale.edu' : '74.125.228.73', 'weakabcd.com' : '74.125.228.73'}
+
+
+# get the mapping of cellphone numbers to IP addresses
+
+br = Browser()
+br.open("http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/")
+
+# words to exclude irrelevant links
+words = ['Name','Last modified','Size','Description','Parent Directory']
+
+mapping = dict()
+
+# get all the cellphone numbers with registered IP addresses
+# .links() optionally accepts the keyword args of .follow_/.find_link()
+for link in br.links():
+    if link.text not in words:
+	print link.text
+	# get the corresponding IP address
+	ipaddr = urllib2.urlopen('http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/' + link.text).read()
+	mapping[link.text] = ipaddr
+
+print mapping
+    #br.follow_link(link)  # takes EITHER Link instance OR keyword args
+    #br.back()
 
 
 
