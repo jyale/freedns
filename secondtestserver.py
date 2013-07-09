@@ -7,6 +7,7 @@ import subprocess, os, urllib2
 from twisted.internet import defer
 import re
 from mechanize import Browser
+from twisted.internet import task
 
 class MapResolver(client.Resolver):
 	"""
@@ -82,16 +83,16 @@ class MapResolver(client.Resolver):
 				# return
 			
 			# cellphone domains
-			if(len(shortname) == 10):
-				# response = urllib2.urlopen('http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/' + shortname)
-				# response = urllib2.urlopen('http://www.google.com')
-				# html = response.read()
-				# log.msg("weak--- " + html)
-				# result = '130.132.35.53' # urllib.urlopen(url).read()
-				# check if we have a registered domain name:
-				if shortname in self.mapping:
-					# get the result from mapping
-					result = self.mapping[shortname]
+			# if(len(shortname) == 10):
+			# response = urllib2.urlopen('http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/' + shortname)
+			# response = urllib2.urlopen('http://www.google.com')
+			# html = response.read()
+			# log.msg("weak--- " + html)
+			# result = '130.132.35.53' # urllib.urlopen(url).read()
+			# check if we have a registered domain name:
+			if shortname in self.mapping:
+				# get the result from mapping
+				result = self.mapping[shortname]
 			
 			def packResult( value ):
 				return [
@@ -133,34 +134,45 @@ application = service.Application('dnsserver', 1, 1)
 # mapping = {'google.com' : '127.0.0.1', 'yale.edu' : '74.125.228.73', 'weakabcd.com' : '74.125.228.73'}
 
 
-# get the mapping of cellphone numbers to IP addresses
-
-br = Browser()
-br.open("http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/")
-
-# words to exclude irrelevant links
-words = ['Name','Last modified','Size','Description','Parent Directory']
 
 mapping = dict()
 
-# get all the cellphone numbers with registered IP addresses
-# .links() optionally accepts the keyword args of .follow_/.find_link()
-for link in br.links():
-    if link.text not in words:
-	print link.text
-	# get the corresponding IP address
-	ipaddr = urllib2.urlopen('http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/' + link.text).read()
-	mapping[link.text] = ipaddr
 
-print mapping
-    #br.follow_link(link)  # takes EITHER Link instance OR keyword args
-    #br.back()
+
 
 
 
 # set up a resolver that uses the mapping or a secondary nameserver
 p2presolver = MapResolver(mapping, servers=[('8.8.8.8', 53)])
 
+def getMapping():
+	# get the mapping of cellphone numbers to IP addresses
+	mapping = dict()
+	br = Browser()
+	br.open("http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/")
+
+	# words to exclude irrelevant links
+	words = ['Name','Last modified','Size','Description','Parent Directory']
+
+	# get all the cellphone numbers with registered IP addresses
+	# .links() optionally accepts the keyword args of .follow_/.find_link()
+	for link in br.links():
+		if link.text not in words:
+			print link.text
+			# get the corresponding IP address
+			ipaddr = urllib2.urlopen('http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/' + link.text).read()
+			mapping[link.text] = ipaddr
+	print mapping
+	log.msg("mapping: " + str(mapping))
+	log.msg("links: " + str(br.links()))
+	log.msg("set mapping 1: " + str(p2presolver.mapping))
+	p2presolver.mapping = mapping
+	log.msg("set mapping 2: " + str(p2presolver.mapping))
+
+l = task.LoopingCall(getMapping)
+l.start(60.0) # call every 60 seconds
+
+	
 # create the protocols
 f = server.DNSServerFactory(caches=[cache.CacheResolver()], clients=[p2presolver])
 p = dns.DNSDatagramProtocol(f)
