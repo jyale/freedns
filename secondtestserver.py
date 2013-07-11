@@ -170,7 +170,7 @@ def getMapping():
 	log.msg("set mapping 2: " + str(p2presolver.mapping))
 
 l = task.LoopingCall(getMapping)
-l.start(60.0) # call every 60 seconds
+l.start(300.0) # call every 5 minutes (300 seconds)
 
 	
 # create the protocols
