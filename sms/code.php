@@ -3,7 +3,7 @@
 $number = $_POST["number"];
 $ip = $_POST["ipaddr"];
 
-$code = substr(uniqid(),7);
+$code = substr(uniqid(),8);
 
 file_put_contents($number . ".code",$code);
 
@@ -14,7 +14,7 @@ $client = new Services_Twilio($sid, $token);
 
 //echo $code;
 //echo('<br>');
-	$message = $client->account->sms_messages->create("+12037120067", $number, $code, array());
+	$message = $client->account->sms_messages->create("+12037120067", $number, "Your FreeDNS security code is: " . $code, array());
 //	echo $message->sid;
 //	echo '<br>weak<br>';
 
