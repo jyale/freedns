@@ -20,22 +20,39 @@ $client = new Services_Twilio($sid, $token);
 
 ?>
 
+<!DOCTYPE html>   
+<html lang="en">   
+<head>   
+<meta charset="utf-8">   
+<title>Register cellphone</title>   
+<meta name="description" content="weak">   
+<link href="assets/css/bootstrap.css" rel="stylesheet">  
+
+</head>  
+<body>  
 
 
-<html>
-<body>
+<form class='form-horizontal' enctype="multipart/form-data" action="insert.php" method="POST">
+<fieldset>
+ <legend>Enter the security code sent to your phone: </legend>
 
-Phone number: <?php echo $_POST["number"]; ?><br>
-IP address: <?php echo $_POST["ipaddr"]; ?>
-<br>
+<input type="text" class="hide" name="number" value="<? echo $number ?>" hidden>
+<input type="text" class="hide" name="ipaddr" value="<? echo $ip ?>" hidden>
 
-<form action="insert.php" method="post">
-<input type="text" name="number" value="<? echo $number ?>" hidden>
-<input type="text" name="ipaddr" value="<? echo $ip ?>" hidden>
-Code: <input type="text" name="code"><br>
-<input type="submit" >
-</form>
+ <div class="control-group">  
+		
+	     <label class="control-label" for="area">Security code: </label>  
+            <div class="controls">  
+              <input class="text" name="code"></input>  
+            </div>  
+          </div>  
+<div class="form-actions">  
+<button type="submit" class="btn btn-primary">Next &raquo</button>  
+</div>    
+
+ </fieldset> 
+</form>  
+</body>  
+</html>  
 
 
-</body>
-</html> 
