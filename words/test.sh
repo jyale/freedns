@@ -12,4 +12,4 @@ while read p; do
   out=$(dig $q +short | head -n 1);
   done=$q", "$out;
   echo $done >> weak.out
-done < weak
+done < unixfile.txt
