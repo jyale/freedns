@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
-import urllib2
+import httplib2
+from BeautifulSoup import BeautifulSoup, SoupStrainer
 
-response = urllib2.urlopen('http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/')
-html = response.read()
+http = httplib2.Http()
+status, response = http.request('http://mahan.webfactional.com/sms/freedns/sms/cellphonedomains/')
 
-print html
+for link in BeautifulSoup(response, parseOnlyThese=SoupStrainer('a')):
+    if link.has_attr('href'):
+        print link['href']

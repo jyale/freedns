@@ -52,10 +52,10 @@ if __name__ == '__main__':
     d = defer.gatherResults([
             r.lookupAddress(domainname).addCallback(
                 formatResult, 'Addresses'),
-            r.lookupMailExchange(domainname).addCallback(
-                formatResult, 'Mail Exchangers'),
-            r.lookupNameservers(domainname).addCallback(
-                formatResult, 'Nameservers'),
+            #r.lookupMailExchange(domainname).addCallback(
+            #    formatResult, 'Mail Exchangers'),
+            #r.lookupNameservers(domainname).addCallback(
+            #    formatResult, 'Nameservers'),
             ], consumeErrors=True)
 
     d.addCallbacks(printResults, printError)
