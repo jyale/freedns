@@ -7,10 +7,8 @@
 # dig google.com +short | head -n 1
 
 while read p; do
-  a='.com';
-  q=$p$a;
-  out=$(dig $q +short | head -n 1);
-  done=$q", "$out;
-  echo $done >> weak.out;
+  out=$(echo -n $p | openssl sha1);
+  done=$p", "$out;
+  echo $done >> hashed.out;
   echo $done;
-done < domains.csv
+done < linuxdomains.csv
