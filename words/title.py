@@ -5,10 +5,10 @@ br = Browser()
 
 # print sys.argv[1]
 
-fname="weak.out"
+fname="domains.csv"
 with open(fname) as f:
     content = f.readlines()
-for line in content[10]:
-	url = line.split(',')[0]
-	br.open("http://" + url)
+for line in content:
+	print line
+	br.open("http://" + line)
 	print br.title()
