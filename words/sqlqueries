@@ -1,5 +1,6 @@
 INSERT INTO domains (url,cid,ip,title) VALUES("aardvark.com","ec7fef280858efe49f06e46349ba9ba93857f637","67.210.123.5"," Aardvark");
 
+mysql -u user -p --local-infile freedns
 
 load data local infile 'hashed-titles.csv' into table domains fields terminated by ','
 (url, cid, ip, title)
