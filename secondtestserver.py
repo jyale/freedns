@@ -9,6 +9,11 @@ import re
 from mechanize import Browser
 from twisted.internet import task
 
+import _mysql
+
+# connect to the mySQL server
+db=_mysql.connect(host="localhost",user="root",passwd="mysqlrootuser",db="freedns")
+
 class MapResolver(client.Resolver):
 	"""
 	Resolves names by looking in a mapping. 
@@ -44,6 +49,19 @@ class MapResolver(client.Resolver):
 					# redirect to DeDIS group web page if we have a valid freedns name (ssh-keygen public key fingerprint)
 					# example valid freedns name: 6f700b83be72c6e24c45612e04717103.freedns
 					result = '128.36.233.146'
+					
+					# lookup hash in database					
+					# db.query("""select ip from domains where cid like 'b2adea083c22ac1a114a7226c35b6c4e3ff2ab3a';""")
+					db.query("""select ip from domains where cid like '""" + shortname + """';""")
+					
+					r = db.store_result()
+					row = r.fetch_row()
+					if row:
+						result=row[0][0]
+						log.msg(row[0][0])
+					# if there is an entry in the database
+					#if row:
+					#	log.msg("SQL: " + row)
 				#else:		
 				# yale.edu ip addr
 				# result = '130.132.35.53' 
