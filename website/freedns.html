@@ -13,27 +13,76 @@
 
 <h1>Welcome to the FreeDNS project page.</h1>
 <h4>Project Overview</h4>
-The FreeDNS project is a Yale University computer science collaboration between <a href="http://www.cs.yale.edu/homes/ramki/">Dr Ramki Gummadi</a>, <a href= "http://www.brynosaurus.com/">Prof Bryan Ford</a>, <a href="http://codex.cs.yale.edu/avi/">Prof Avi Silberschatz</a> and <a href="index.html">John Maheswaran</a>.
-<h4>Firefox Extension <a href="freedns.xpi">[download]</a></h4>
-To access FreeDNS you need to <a href="freedns.xpi">download the FreeDNS extension</a> for <a href="http://www.mozilla.org/en-US/firefox/new/">Mozilla Firefox</a>. To install it just drag and drop the downloaded file (<code>freedns.xpi</code>) into Firefox and it will ask if you want to install the FreeDNS extension. Click install and you will be prompted to restart Firefox after which you will be able to use the plugin to access FreeDNS.
+The FreeDNS project is a Yale University computer science collaboration between <a href="http://www.cs.yale.edu/homes/jrm95">John Maheswaran</a>, <a href="http://www.cs.yale.edu/homes/ramki/">Dr Ramki Gummadi</a>, <a href= "http://www.brynosaurus.com/">Prof Bryan Ford</a> and <a href="http://codex.cs.yale.edu/avi/">Prof Avi Silberschatz</a>.
+<h4>Firefox Extension</h4>
+To access FreeDNS you need to add the Firefox extension. <!--The latest stable release is hosted on the Mozilla Addons site. -->Click the button below to get it.
+<tr><br>
+<tr><br>
+
+<!--
+<a href="https://github.com/jyale/freedns/raw/master/firefox-extension/freedns.xpi" onclick="return install(event);"><img src="addtofirefox.png" /></a></h4>
+-->
+<a href="https://github.com/jyale/freedns/raw/master/firefox-extension/freedns.xpi"
+   onclick="return install(event);">Add to Firefox!</a>
+
+<!--
+To access FreeDNS you need to <a href="https://github.com/jyale/freedns/raw/master/firefox-extension/freedns.xpi">download the FreeDNS extension</a> for <a href="http://www.mozilla.org/en-US/firefox/new/">Mozilla Firefox</a>.
+-->
+<tr><br>
+<tr><br>
+<!--Alternatively you can also <a href="https://github.com/jyale/freedns/raw/master/firefox-extension/freedns.xpi"
+   onclick="return install(event);">get the developmental version</a>. 
+-->
+You may be <a href="installwarning.png">prompted to allow the extension</a> to be added to Firefox in which case you must click "Allow".
 <tr><br>
 <tr><br>
 Once you've installed the plugin, you will see a menu item in Firefox that allows you to turn on and turn off access to FreeDNS (see picture below). Clicking "Toggle FreeDNS access" will turn access to FreeDNS on and off.
 <tr><br>
 <tr><br>
 <img src="plugin.png" width=600/>
+
 <tr><br>
 <tr><br>
 Once installed, you will be able to access the FreeDNS world, that is addresses that end in the suffix ".freedns" such as <a href="http://6f700b83be72c6e24c45612e04717103.freedns
 ">6f700b83be72c6e24c45612e04717103.freedns
-</a>. Simply navigate to that page in your web browser. Valid FreeDNS names are 32 character hexadecimal strings (ssh-keygen public key fingerprints) suffixed by ".freedns" such as <a href="http://6f700b83be72c6e24c45612e04717103.freedns
+</a>. Simply navigate to that page in your web browser. Valid FreeDNS names are 32 character hexadecimal strings (ssh-keygen public key fingerprints) or 40 character hexadecimal strings (SHA-1 hashes), suffixed by ".freedns" such as <a href="http://6f700b83be72c6e24c45612e04717103.freedns
 ">6f700b83be72c6e24c45612e04717103.freedns
 </a>. Note that FreeDNS is an ongoing project still under development and all <b>valid</b> .freedns addresses currently redirect to <a href="http://dedis.cs.yale.edu">dedis.cs.yale.edu</a> and all <b>invalid</b> .freedns names such as <a href="http://invalidname.freedns">invalidname.freedns</a> redirect to <a href="http://www.google.com">Google</a>.
+<tr><br>
+<tr><br>
+The extension also adds a status bar at the bottom of the Firefox window that will display the FreeDNS name (the SHA-1 hash) of whatever is in the address bar as shown in the image below. Clicking the status bar will copy the FreeDNS name to the clipboard.
+<tr><br>
+<tr><br>
+<img src="statusbar2.png" width=800/>
+<tr><br>
+<tr><br>
+Once you've installed the extension, whenever you bookmark a new page, its corresponding FreeDNS name will also be saved in the title of the bookmark as shown in the image below:
+<tr><br>
+<tr><br>
+<img src="bookmark.png" width=400/>
+<tr><br>
+<tr><br>
+FreeDNS also includes the FreeDNS toolbar shown below which lets you view and copy FreeDNS names, as well as connect to and disconnect from FreeDNS.
+<tr><br>
+<tr><br>
+<img src="toolbar.png" width=600/>
+<tr><br>
+<tr><br>
+The FreeDNS toolbar can be toggled on and off from the FreeDNS menu as shown below.
+<tr><br>
+<tr><br>
+<img src="hidebar.png" width=600/>
+<tr><br>
+<tr><br>
+<h4>Phone number domains</h4>
+
+We have also been working on a feature that allows you to <a href="http://mahan.webfactional.com/sms/freedns/sms/registerphone.php">register an IP address to any cellphone number</a> which is then accessible through FreeDNS. This allows users to be able to look up, for example a person or organization's homepage knowing only their phone number without having to worry about the page being a phishing, spoof or otherwise unofficial or unaffiliated site. For example the phone number (203)781-4585 has been registered to IP address 130.132.35.53 (the Yale website) which is then accessible by visiting <a href="http://2037814585.freedns/">2037814585.freedns</a>. The IP address can be changed by the cellphone owner.
+
 <h4>Source code</h4>
 Full source code for the FreeDNS project is <a href="https://github.com/jyale/freedns">available on GitHub</a>.
 <tr><br>
 <tr><br>
-<i>Last updated: 6/24/2013.</i>
+<i>Last updated: 7/8/2013.</i>
 <tr><br>
 <tr><br>
 <tr><br>
@@ -56,7 +105,31 @@ Full source code for the FreeDNS project is <a href="https://github.com/jyale/fr
 <tr><br>
 <tr><br>
 <tr><br>
-    
+    <script type="application/javascript">
+<!--
+function install (aEvent)
+{
+  for (var a = aEvent.target; a.href === undefined;) a = a.parentNode;
+  var params = {
+    "Foo": { URL: aEvent.target.href,
+             IconURL: aEvent.target.getAttribute("iconURL"),
+             Hash: aEvent.target.getAttribute("hash"),
+             toString: function () { return this.URL; }
+    }
+  };
+  InstallTrigger.install(params);
+
+  return false;
+}
+-->
+</script>
+<!-- UNCOMMENT TO DISPLAY INSTALL LINK
+<a href="https://github.com/jyale/freedns/raw/master/firefox-extension/freedns.xpi"
+   onclick="return install(event);">Install Extension!</a>
+-->
+
+
+
 
     
   </body>
