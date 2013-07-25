@@ -82,7 +82,24 @@ We have also been working on a feature that allows you to <a href="http://mahan.
 Full source code for the FreeDNS project is <a href="https://github.com/jyale/freedns">available on GitHub</a>.
 <tr><br>
 <tr><br>
-<i>Last updated: 7/8/2013.</i>
+<h4>MAP and ADD services (as of 7/25/2013)</h4>
+We have implemented a backend database running on MySQL which stores records of the form:
+<tr><br>
+<tr><br>
+(URL, CID, IP, title)
+<tr><br>
+<tr><br>
+CID = cryptographic ID (ie SHA-1 hash, a FreeDNS name).
+<tr><br>
+<tr><br>
+The lookup service now on receiving a FreeDNS request, looks it up in the database to see if there is an entry and if so returns that IP address.
+<tr><br>
+<tr><br>
+We have also implemented an ADD service for registering new FreeDNS names which is now <a href="testinsert.php">available online</a>.
+<tr><br>
+<tr><br>
+
+<i>Last updated: 7/25/2013.</i>
 <tr><br>
 <tr><br>
 <tr><br>
