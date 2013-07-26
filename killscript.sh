@@ -4,4 +4,4 @@
 
 # kill the processes if they're already running
 pkill python
-pkill twistd
+pkill -9 twistd

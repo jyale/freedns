@@ -1,13 +1,10 @@
+import subprocess, os, urllib2, string, re, hashlib
 from twisted.names import dns, server, client, cache
 from twisted.application import service, internet
-import string
 from twisted.python import log
 from os import system
-import subprocess, os, urllib2
-from twisted.internet import defer
-import re
+from twisted.internet import defer, task
 from mechanize import Browser
-from twisted.internet import task
 
 import _mysql
 
@@ -128,9 +125,30 @@ class MapResolver(client.Resolver):
 			
 			return x
 		else:
+			log.msg("Google says....")
 			x = self._lookup(name, dns.IN, dns.A, timeout)
-			print x
+			
+			# check if we already have the name in the database
+			db.query("""select * from domains where url like '""" + name + """';""")
+			r = db.store_result()
+			row = r.fetch_row()
+			cid = hashlib.sha1(name).hexdigest()
+			
+			if not row:
+				log.msg("new domain: " + name)
+				# look up the IP address (may be SLOWWW)
+				ip = os.popen('dig ' + name + ' +short | sort | head -n 1').read()
+				# add the new domain to the database
+				db.query("""INSERT INTO domains (url,cid,ip,title) VALUES('""" + name + """','""" + cid + """','""" + ip + """','NULL');""")
+			else:
+				log.msg("old domain: " + name)
 			return x
+	
+	def weak(a,b):
+		log.msg("Fool!")
+		log.msg(a)
+		log.msg(b)
+		return (a,b)
 	
 	# CNAME lookups
 	def lookupCanonicalName(self, name, timeout=None):
