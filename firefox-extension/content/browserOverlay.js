@@ -89,11 +89,19 @@ XULSchoolChrome.BrowserOverlay = {
 		var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
 		var samplePanel = document.getElementById('status-bar-sample-1');
 		// alert("Hello World! \n\n" + newURL + " \n\n" + Sha1.hash(newURL));
+		// obtain just the URL
+		newURL = newURL.replace("http://","");
+		newURL = newURL.replace("https://","");
+		// split on the forward slash
+		var n = newURL.split("/"); 
+		newURL = n[0];
+		
 		var shortnewURL = newURL;
 		if(shortnewURL.length > 50){
 			// truncate URL if too long to display in status bar
 			shortnewURL = newURL.substring(0,50) + "...";
 		}
+		
 		samplePanel.label = "FreeDNS name: " + Sha1.hash(newURL) + ".freedns [click to copy]";
 	};
 	
@@ -109,6 +117,12 @@ XULSchoolChrome.BrowserOverlay = {
 		prefs.setIntPref("socks_port", 1080);
 		prefs.setIntPref("socks_version", 4);
 		prefs.setCharPref("socks", "128.36.231.74");	
+		
+		// disable dns caching
+		var prefsx = Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefService).getBranch("network.");
+		prefsx.setIntPref("network.dnsCacheExpiration",0)
+		
 		// say that we are connected to FreeDNS
 		var rightPanel = document.getElementById('right-panel');
 		var toggleButton = document.getElementById('nav-toggle');
@@ -141,9 +155,16 @@ XULSchoolChrome.BrowserOverlay = {
 	{
 		// get the url from address bar
 		var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
+		// obtain just the URL
+		newURL = newURL.replace("http://","");
+		newURL = newURL.replace("https://","");
+		// split on the forward slash
+		var n = newURL.split("/"); 
+		newURL = n[0];
+		
 		// hash it with sha1
 		var fdnsname = Sha1.hash(newURL) + ".freedns";
-		alert("Copied FreeDNS name to clipboard: \n" + fdnsname);
+		alert("Copied FreeDNS name to clipboard: \n" + fdnsname + "\n" + newURL);
 		
 		// copy the freedns hash to the clipboard
 		const gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
@@ -158,6 +179,13 @@ XULSchoolChrome.BrowserOverlay = {
 	
 	function viewDns(){
 		var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
+		// obtain just the URL
+		newURL = newURL.replace("http://","");
+		newURL = newURL.replace("https://","");
+		// split on the forward slash
+		var n = newURL.split("/"); 
+		newURL = n[0];
+		
 		// hash it with sha1
 		var fdnsname = Sha1.hash(newURL) + ".freedns";
 		alert(fdnsname + "\nis the FreeDNS name for:\n" + newURL);
@@ -216,6 +244,13 @@ XULSchoolChrome.BrowserOverlay = {
 	  onItemAdded: function(aItemId, aFolder, aIndex) {
 		// get the freedns name
 		var newURL = window.top.getBrowser().selectedBrowser.contentWindow.location.href;
+		// obtain just the URL
+		newURL = newURL.replace("http://","");
+		newURL = newURL.replace("https://","");
+		// split on the forward slash
+		var n = newURL.split("/"); 
+		newURL = n[0];
+		
 		var fdnsname = Sha1.hash(newURL) + ".freedns";
 		// get the current bookmark title
 		var title = bmsvc.getItemTitle(aItemId);

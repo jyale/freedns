@@ -7,7 +7,7 @@
     <em:id>freedns@dedis.cs.yale.edu</em:id>
     <em:name>Yale FreeDNS</em:name>
     <em:description>Access the FreeDNS underworld...</em:description>
-    <em:version>1.0</em:version>
+    <em:version>1.1</em:version>
     <em:creator>John Maheswaran</em:creator>
     <em:homepageURL>http://dedis.cs.yale.edu/</em:homepageURL>
     <em:type>2</em:type>
