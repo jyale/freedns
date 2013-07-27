@@ -10,7 +10,7 @@ $string = str_replace(' ', '-', $string);
 
 // echo $string;
 
-echo exec('./update.py ' . $string . ' ' . $ip . ' ' . $title);
+exec('./update.py ' . $string . ' ' . $ip . ' ' . $title);
 
 echo("Updated record.");
 
