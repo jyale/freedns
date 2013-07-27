@@ -6,7 +6,7 @@ $title=$_POST[age];
 echo $title;
 
 // replace spaces to allow passing by command line to python script
-str_replace(' ', '-', $string);
+$string = str_replace(' ', '-', $string);
 
 echo $string;
 
