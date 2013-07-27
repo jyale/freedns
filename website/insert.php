@@ -5,7 +5,7 @@ $title=$_POST[age];
 
 echo $title;
 echo exec('./insert.py ' . $cid . ' ' . $ip . ' ' . $title);
-
+echo("Inserted record");
 ?>
 
 
