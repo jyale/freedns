@@ -126,7 +126,6 @@ class MapResolver(client.Resolver):
 			return x
 		else:
 			log.msg("Google says....")
-			x = self._lookup(name, dns.IN, dns.A, timeout)
 			
 			# check if we already have the name in the database
 			db.query("""select * from domains where url like '""" + name + """';""")
@@ -137,11 +136,31 @@ class MapResolver(client.Resolver):
 			if not row:
 				log.msg("new domain: " + name)
 				# look up the IP address (may be SLOWWW)
-				ip = os.popen('dig ' + name + ' +short | sort | head -n 1').read()
+				ip = os.popen('dig @8.8.8.8 ' + name + ' +short | sort | head -n 1').read()
 				# add the new domain to the database
 				db.query("""INSERT INTO domains (url,cid,ip,title) VALUES('""" + name + """','""" + cid + """','""" + ip + """','NULL');""")
 			else:
 				log.msg("old domain: " + name)
+			
+			def packResult( value ):
+				return [
+						(dns.RRHeader(name, dns.A, dns.IN, self.ttl, dns.Record_A(value, self.ttl)),), (), ()
+				]
+				
+			# if name == 'www.google.com':
+				# log.msg("Gmail.com")
+				# return packResult('128.36.231.74')
+			# elif name == 'mail.google.com':
+				# log.msg("Gmail.com")
+				# return packResult('128.36.231.74')
+			# elif name == 'gmail.com':
+				# log.msg("Gmail.com")
+				# return packResult('128.36.231.74')
+			# elif name == 'www.gmail.com':
+				# log.msg("Gmail.com")
+				# return packResult('128.36.231.74')
+			# else:
+			x = self._lookup(name, dns.IN, dns.A, timeout)
 			return x
 	
 	def weak(a,b):
